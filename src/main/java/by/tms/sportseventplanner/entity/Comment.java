@@ -27,4 +27,10 @@ public class Comment {
 
     @Column(updatable = false)
     private LocalDateTime dateCreating;
+
+
+    @PrePersist
+    protected void onCreate() {
+        this.dateCreating = LocalDateTime.now();
+    }
 }

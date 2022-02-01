@@ -1,24 +1,20 @@
-package by.tms.sportseventplanner.entity;
+package by.tms.sportseventplanner.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
 import java.time.LocalDate;
-
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Event {
+@Component
+public class SentEventDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String creatorOrganization;
@@ -33,6 +29,4 @@ public class Event {
 
     private String venue;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> participants;
 }
