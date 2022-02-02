@@ -1,6 +1,7 @@
 package by.tms.sportseventplanner.service;
 
 import by.tms.sportseventplanner.entity.Organization;
+import by.tms.sportseventplanner.repository.CommentRepository;
 import by.tms.sportseventplanner.repository.EventRepository;
 import by.tms.sportseventplanner.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class OrganizationService {
     @Autowired
     private EventRepository eventRepository;
 
+    @Autowired
+    private CommentRepository commentRepository;
+
     public Organization save(Organization organization) {
         if (organizationRepository.existsByName(organization.getName())) {
             throw new RuntimeException(String.format("Organization {} already exist! %s", organization.getName()));
@@ -31,7 +35,8 @@ public class OrganizationService {
                 .findByName(name)
                 .orElseThrow(() -> new RuntimeException(String.format("Organization {} is not exist! %s", name)));
         organizationRepository.deleteByName(name);
-        eventRepository.deleteByCreatorOrganization(name);
+        eventRepository.deleteAllByCreatorOrganization(name);
+        commentRepository.deleteAllByCreatorName(name);
         return organization;
     }
 

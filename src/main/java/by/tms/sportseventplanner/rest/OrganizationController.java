@@ -1,4 +1,4 @@
-package by.tms.sportseventplanner.controller;
+package by.tms.sportseventplanner.rest;
 
 import by.tms.sportseventplanner.dto.organization.OrganizationDto;
 import by.tms.sportseventplanner.entity.Organization;

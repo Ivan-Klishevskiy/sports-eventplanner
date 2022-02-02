@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -28,5 +29,7 @@ public class SentEventDto {
     private long weatherId;
 
     private String venue;
+
+    private List<String> participants;
 
 }

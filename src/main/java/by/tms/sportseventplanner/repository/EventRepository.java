@@ -13,5 +13,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     Optional<List<Event>> findAllByDate(LocalDate date);
 
-    void deleteByCreatorOrganization(String CreatorOrganizationName);
+    void deleteAllByCreatorOrganization(String CreatorOrganizationName);
 }

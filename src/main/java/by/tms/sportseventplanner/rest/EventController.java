@@ -1,4 +1,4 @@
-package by.tms.sportseventplanner.controller;
+package by.tms.sportseventplanner.rest;
 
 import by.tms.sportseventplanner.dto.event.RequestEventDto;
 import by.tms.sportseventplanner.dto.event.SentEventDto;
@@ -20,8 +20,8 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
-    @Autowired
-    private ModelMapper mapper;
+        @Autowired
+        private ModelMapper mapper;
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody RequestEventDto eventDto) {
@@ -64,5 +64,17 @@ public class EventController {
     public ResponseEntity<?> getEventById(@PathVariable long id){
         Event found = eventService.findById(id);
         return new ResponseEntity<>(mapper.map(found, SentEventDto.class), HttpStatus.OK);
+    }
+
+    @PostMapping("/takePart/{eventId}")
+    public ResponseEntity<?> addParticipant(@PathVariable long eventId, @RequestParam String participant){
+        Event event = eventService.addParticipant(participant, eventId);
+        return new ResponseEntity<>(mapper.map(event, SentEventDto.class), HttpStatus.OK);
+    }
+
+    @PostMapping("/notPart/{eventId}")
+    public ResponseEntity<?> removeParticipant(@PathVariable long eventId, @RequestParam String participant){
+        Event event = eventService.removeParticipant(participant, eventId);
+        return new ResponseEntity<>(mapper.map(event, SentEventDto.class), HttpStatus.OK);
     }
 }

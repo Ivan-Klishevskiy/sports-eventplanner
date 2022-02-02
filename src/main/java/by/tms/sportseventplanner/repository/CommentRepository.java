@@ -11,4 +11,8 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
     Optional<List<Comment>> findAllByCreatorName(String creatorName);
 
     Optional<List<Comment>> findAllByEventId(long eventId);
+
+    void deleteAllByEventId(long eventId);
+
+    void deleteAllByCreatorName(String creatorName);
 }

@@ -1,4 +1,4 @@
-package by.tms.sportseventplanner.controller;
+package by.tms.sportseventplanner.rest;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
