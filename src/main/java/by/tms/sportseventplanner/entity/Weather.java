@@ -1,36 +1,51 @@
 package by.tms.sportseventplanner.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Weather {
+public class Weather implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(updatable = false)
-    private LocalDateTime date;
+    private LocalDate date;
 
+    @JsonProperty("name")
     private String city;
 
-    private String temp;
+    @JsonProperty("temp")
+    private float temp;
 
-    private long pressure;
+    @JsonProperty("pressure")
+    private int pressure;
 
+    @JsonProperty("humidity")
     private int humidity;
 
+    @JsonProperty("windSpeed")
     private float windSpeed;
 
-    private long visibility;
+    @JsonProperty("visibility")
+    private int visibility;
 
+    @JsonProperty("description")
     private String description;
+
+    @PrePersist
+    protected void onCreate() {
+        this.date = LocalDate.now();
+    }
 }
