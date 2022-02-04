@@ -30,7 +30,7 @@ public class CommentService {
 
         Organization organization = organizationRepository
                 .findByName(comment.getCreatorName())
-                .orElseThrow(() -> new RuntimeException(String.format("Organization {} is not exist! %s", comment.getCreatorName())));
+                .orElseThrow(() -> new RuntimeException(String.format("Organization %s is not exist!", comment.getCreatorName())));
 
         comment.setEventId(event.getId());
         return commentRepository.save(comment);
@@ -38,22 +38,22 @@ public class CommentService {
 
     public Comment getCommentByCommentId(long commentId) {
         return commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException(String.format("Comment with id {} is not exist! %s", commentId)));
+                .orElseThrow(() -> new RuntimeException(String.format("Comment with id %s is not exist!", commentId)));
     }
 
     public List<Comment> getListCommentByEventId(long eventId) {
         return commentRepository.findAllByEventId(eventId)
-                .orElseThrow(() -> new RuntimeException(String.format("Comment with eventId {} is not exist! %s", eventId)));
+                .orElseThrow(() -> new RuntimeException(String.format("Comment with eventId %s is not exist!", eventId)));
     }
 
     public List<Comment> getListCommentByCreatorName(String creatorName) {
         return commentRepository.findAllByCreatorName(creatorName)
-                .orElseThrow(() -> new RuntimeException(String.format("Comment with creatorName {} is not exist! %s", creatorName)));
+                .orElseThrow(() -> new RuntimeException(String.format("Comment with creatorName %s is not exist!", creatorName)));
     }
 
     public Comment deleteById(long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException(String.format("Comment with id {} is not exist! %s", commentId)));
+                .orElseThrow(() -> new RuntimeException(String.format("Comment with id %s is not exist!", commentId)));
         commentRepository.delete(comment);
         return comment;
     }
