@@ -68,4 +68,11 @@ public class WeatherService {
         }
         return weatherByApi;
     }
+
+    public Weather getEventWeather(long eventId){
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException(String.format("Event id %d is not exist!", eventId)));
+        return weatherRepository.findById(event.getWeatherId())
+                .orElseThrow(() -> new RuntimeException("Еhe weather is unknown"));
+    }
 }

@@ -23,7 +23,7 @@ public class OrganizationService {
 
     public Organization save(Organization organization) {
         if (organizationRepository.existsByName(organization.getName())) {
-            throw new RuntimeException(String.format("Organization {} already exist! %s", organization.getName()));
+            throw new RuntimeException(String.format("Organization %s already exist!", organization.getName()));
         } else {
             return organizationRepository.save(organization);
         }
@@ -33,7 +33,7 @@ public class OrganizationService {
     public Organization delete(String name) {
         Organization organization = organizationRepository
                 .findByName(name)
-                .orElseThrow(() -> new RuntimeException(String.format("Organization {} is not exist! %s", name)));
+                .orElseThrow(() -> new RuntimeException(String.format("Organization %s is not exist!", name)));
         organizationRepository.deleteByName(name);
         eventRepository.deleteAllByCreatorOrganization(name);
         commentRepository.deleteAllByCreatorName(name);
@@ -43,7 +43,7 @@ public class OrganizationService {
     public Organization update(Organization updated, String name) {
         Organization current = organizationRepository
                 .findByName(name)
-                .orElseThrow(() -> new RuntimeException(String.format("Organization {} is not exist! %s", name)));
+                .orElseThrow(() -> new RuntimeException(String.format("Organization %s is not exist!", name)));
         updated.setId(current.getId());
         //TODO добавить изменение данных об организации в ее постах и коментах
         return organizationRepository.saveAndFlush(updated);
