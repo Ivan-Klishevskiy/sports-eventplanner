@@ -1,5 +1,6 @@
 package by.tms.sportseventplanner.dto.event;
 
+import by.tms.sportseventplanner.entity.Weather;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class SentEventDto {
 
     private LocalDate date;
 
-    private long weatherId;
+    private Weather weather;
 
     private String venue;
 

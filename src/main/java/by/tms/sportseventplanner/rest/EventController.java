@@ -41,7 +41,7 @@ public class EventController {
         return new ResponseEntity<>(mapper.map(deleted, SentEventDto.class), HttpStatus.OK);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/getByName/{name}")
     public ResponseEntity<?> getEventsByCreatorName(@PathVariable String name) {
         List<SentEventDto> sentEventDtoList = eventService.findAllByCreatorName(name)
                 .stream()
@@ -60,7 +60,7 @@ public class EventController {
         return new ResponseEntity<>(sentEventDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getById/{id}")
     public ResponseEntity<?> getEventById(@PathVariable long id){
         Event found = eventService.findById(id);
         return new ResponseEntity<>(mapper.map(found, SentEventDto.class), HttpStatus.OK);

@@ -31,9 +31,4 @@ public class WeatherController {
         return new ResponseEntity<>(mapper.map(currentWeather, WeatherDto.class), HttpStatus.OK);
     }
 
-    @GetMapping("/eventWeather/{eventId}")
-    public ResponseEntity<?> getEventWeather(@PathVariable long eventId){
-        Weather eventWeather = weatherService.getEventWeather(eventId);
-        return new ResponseEntity<>(mapper.map(eventWeather, WeatherDto.class), HttpStatus.OK);
-    }
 }
