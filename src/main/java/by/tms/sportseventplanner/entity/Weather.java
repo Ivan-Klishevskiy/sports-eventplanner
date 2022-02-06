@@ -23,25 +23,18 @@ public class Weather implements Serializable {
     @Column(updatable = false)
     private LocalDate date;
 
-    @JsonProperty("name")
     private String city;
 
-    @JsonProperty("temp")
     private float temp;
 
-    @JsonProperty("pressure")
     private int pressure;
 
-    @JsonProperty("humidity")
     private int humidity;
 
-    @JsonProperty("windSpeed")
     private float windSpeed;
 
-    @JsonProperty("visibility")
     private int visibility;
 
-    @JsonProperty("description")
     private String description;
 
     @PrePersist

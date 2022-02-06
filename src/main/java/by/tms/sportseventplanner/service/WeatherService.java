@@ -43,9 +43,9 @@ public class WeatherService {
 
     @Scheduled(initialDelay = 1000L, fixedDelayString = "PT1M")
     private void setWeatherForEvent() {
-        Optional<List<Event>> optionalEvents = eventRepository.findAllByDateAndWeatherId(LocalDate.now(), 0L);
+        Optional<List<Event>> optionalEvents = eventRepository.findAllByDateAndWeather(LocalDate.now(), null);
         if (optionalEvents.isPresent()) {
-            optionalEvents.get().forEach(event -> event.setWeatherId(getCurrentWeather(event.getVenue()).getId()));
+            optionalEvents.get().forEach(event -> event.setWeather(getCurrentWeather(event.getVenue())));
             eventRepository.saveAll(optionalEvents.get());
         }
     }
@@ -67,12 +67,5 @@ public class WeatherService {
             throw new RuntimeException(e.getMessage()); //TODO записывать в log
         }
         return weatherByApi;
-    }
-
-    public Weather getEventWeather(long eventId){
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new RuntimeException(String.format("Event id %d is not exist!", eventId)));
-        return weatherRepository.findById(event.getWeatherId())
-                .orElseThrow(() -> new RuntimeException("Еhe weather is unknown"));
     }
 }

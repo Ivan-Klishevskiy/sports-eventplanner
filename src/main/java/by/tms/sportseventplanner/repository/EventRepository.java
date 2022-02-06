@@ -1,6 +1,7 @@
 package by.tms.sportseventplanner.repository;
 
 import by.tms.sportseventplanner.entity.Event;
+import by.tms.sportseventplanner.entity.Weather;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     Optional<List<Event>> findAllByDate(LocalDate date);
 
-    Optional<List<Event>> findAllByDateAndWeatherId(LocalDate localDate, Long weatherId);
+    Optional<List<Event>> findAllByDateAndWeather(LocalDate localDate, Weather weather);
 
     void deleteAllByCreatorOrganization(String CreatorOrganizationName);
 }

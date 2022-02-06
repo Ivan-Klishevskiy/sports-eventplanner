@@ -29,7 +29,8 @@ public class Event {
 
     private LocalDate date;
 
-    private long weatherId;
+    @ManyToOne(cascade = CascadeType.DETACH)
+    private Weather weather;
 
     private String venue;
 
