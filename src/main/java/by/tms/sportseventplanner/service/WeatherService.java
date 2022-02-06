@@ -41,7 +41,7 @@ public class WeatherService {
         return weatherRepository.save(currentWeather);
     }
 
-    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT10M")
+    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT1M")
     private void setWeatherForEvent() {
         Optional<List<Event>> optionalEvents = eventRepository.findAllByDateAndWeather(LocalDate.now(), null);
         if (optionalEvents.isPresent()) {
