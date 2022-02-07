@@ -9,6 +9,6 @@ public class Pointcuts {
             "||execution(* by.tms.sportseventplanner.service.OrganizationService.*(..))" +
             "||execution(* by.tms.sportseventplanner.service.CommentService.*(..))"+
             "||execution(* by.tms.sportseventplanner.utils.*.*(..))")
-    public void controllerPointcut() {
+    public void myPointcut() {
     }
 }
