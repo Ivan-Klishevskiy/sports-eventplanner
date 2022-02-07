@@ -3,6 +3,7 @@ package by.tms.sportseventplanner.controller;
 import by.tms.sportseventplanner.dto.organization.OrganizationDto;
 import by.tms.sportseventplanner.entity.Organization;
 import by.tms.sportseventplanner.service.OrganizationService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +24,21 @@ public class OrganizationController {
     private ModelMapper mapper;
 
     @PostMapping("/reg")
+    @Operation(summary = "Registration of a new organization")
     public ResponseEntity<?> registration(@Valid @RequestBody OrganizationDto organizationDto) {
         Organization saved = organizationService.save(mapper.map(organizationDto, Organization.class));
         return new ResponseEntity<>(mapper.map(saved, OrganizationDto.class), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{name}")
+    @Operation(summary = "Deleting an organization")
     public ResponseEntity<?> delete(@PathVariable @Length(min = 1, max = 255) String name) {
         Organization deleted = organizationService.delete(name);
         return new ResponseEntity<>(mapper.map(deleted, OrganizationDto.class), HttpStatus.OK);
     }
 
     @PutMapping("/{name}")
+    @Operation(summary = "Updating an existing organization")
     public ResponseEntity<?> update(@PathVariable String name, @Valid @RequestBody OrganizationDto organizationDto) {
         Organization updated = organizationService.update(mapper.map(organizationDto, Organization.class), name);
         return new ResponseEntity<>(mapper.map(updated, OrganizationDto.class), HttpStatus.OK);

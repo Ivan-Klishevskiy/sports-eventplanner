@@ -4,6 +4,7 @@ import by.tms.sportseventplanner.dto.event.RequestEventDto;
 import by.tms.sportseventplanner.dto.event.SentEventDto;
 import by.tms.sportseventplanner.entity.Event;
 import by.tms.sportseventplanner.service.EventService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.hibernate.validator.constraints.Length;
 import org.intellij.lang.annotations.RegExp;
 import org.modelmapper.ModelMapper;
@@ -28,12 +29,14 @@ public class EventController {
     private ModelMapper mapper;
 
     @PostMapping("/create")
+    @Operation(summary = "Create new event")
     public ResponseEntity<?> create(@Valid @RequestBody RequestEventDto eventDto) {
         Event created = eventService.save(mapper.map(eventDto, Event.class));
         return new ResponseEntity<>(mapper.map(created, SentEventDto.class), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Updating an existing event")
     public ResponseEntity<?> update(@PathVariable long id,
                                     @Valid @RequestBody RequestEventDto requestEventDto) {
         Event updated = eventService.update(mapper.map(requestEventDto, Event.class), id);
@@ -41,12 +44,14 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Deleting an event")
     public ResponseEntity<?> delete(@PathVariable long id) {
         Event deleted = eventService.delete(id);
         return new ResponseEntity<>(mapper.map(deleted, SentEventDto.class), HttpStatus.OK);
     }
 
     @GetMapping("/getByName/{name}")
+    @Operation(summary = "Find event by organization name")
     public ResponseEntity<?> getEventsByCreatorName(@PathVariable @Length(min = 1, max = 255) String name) {
         List<SentEventDto> sentEventDtoList = eventService.findAllByCreatorName(name)
                 .stream()
@@ -56,6 +61,7 @@ public class EventController {
     }
 
     @GetMapping("/getByDate")
+    @Operation(summary = "Find event by date")
     public ResponseEntity<?> getEventsByDate(@RequestParam String date) {
         List<SentEventDto> sentEventDtoList = eventService
                 .findByDate(date)
@@ -66,18 +72,21 @@ public class EventController {
     }
 
     @GetMapping("/getById/{id}")
+    @Operation(summary = "Find event by eventId")
     public ResponseEntity<?> getEventById(@PathVariable long id) {
         Event found = eventService.findById(id);
         return new ResponseEntity<>(mapper.map(found, SentEventDto.class), HttpStatus.OK);
     }
 
     @PostMapping("/takePart/{eventId}")
+    @Operation(summary = "Adding to the event participants")
     public ResponseEntity<?> addParticipant(@PathVariable long eventId, @RequestParam String participant) {
         Event event = eventService.addParticipant(participant, eventId);
         return new ResponseEntity<>(mapper.map(event, SentEventDto.class), HttpStatus.OK);
     }
 
     @PostMapping("/notPart/{eventId}")
+    @Operation(summary = "Withdraw from the event participants")
     public ResponseEntity<?> removeParticipant(@PathVariable long eventId, @RequestParam String participant) {
         Event event = eventService.removeParticipant(participant, eventId);
         return new ResponseEntity<>(mapper.map(event, SentEventDto.class), HttpStatus.OK);

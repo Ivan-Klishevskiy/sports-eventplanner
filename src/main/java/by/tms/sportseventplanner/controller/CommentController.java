@@ -4,6 +4,10 @@ import by.tms.sportseventplanner.dto.comment.RequestCommentDto;
 import by.tms.sportseventplanner.dto.comment.SentCommentDto;
 import by.tms.sportseventplanner.entity.Comment;
 import by.tms.sportseventplanner.service.CommentService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +29,23 @@ public class CommentController {
     @Autowired
     private ModelMapper mapper;
 
-    @PostMapping("/create/{commentId}")
-    public ResponseEntity<?> createComment(@PathVariable long commentId,
+    @PostMapping("/create/{eventId}")
+    @Operation(summary = "Create new comment for event")
+    public ResponseEntity<?> createComment(@PathVariable long eventId,
                                            @Valid @RequestBody RequestCommentDto requestCommentDto) {
-        Comment created = commentService.save(commentId, mapper.map(requestCommentDto, Comment.class));
+        Comment created = commentService.save(eventId, mapper.map(requestCommentDto, Comment.class));
         return new ResponseEntity<>(mapper.map(created, SentCommentDto.class), HttpStatus.CREATED);
     }
 
     @GetMapping("/byId/{commentId}")
+    @Operation(summary = "Find comment by commentId")
     public ResponseEntity<?> getCommentByCommentId(@PathVariable long commentId) {
         Comment found = commentService.getCommentByCommentId(commentId);
         return new ResponseEntity<>(mapper.map(found, SentCommentDto.class), HttpStatus.OK);
     }
 
     @GetMapping("/byEvent/{eventId}")
+    @Operation(summary = "Find comment by eventId")
     public ResponseEntity<?> getAllCommentsByEventId(@PathVariable long eventId) {
         List<SentCommentDto> commentDtoList = commentService.getListCommentByEventId(eventId).stream()
                 .map(comment -> mapper.map(comment, SentCommentDto.class))
@@ -47,6 +54,7 @@ public class CommentController {
     }
 
     @GetMapping("/byOrganization/{creatorName}")
+    @Operation(summary = "Find all comment by organization name")
     public ResponseEntity<?> getAllCommentsByCreatorName(@PathVariable @Length(min = 1, max = 255) String creatorName) {
         List<SentCommentDto> commentDtoList = commentService.getListCommentByCreatorName(creatorName).stream()
                 .map(comment -> mapper.map(comment, SentCommentDto.class))
@@ -55,6 +63,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
+    @Operation(summary = "Delete comment by commentId")
     public ResponseEntity<?> deleteByCommentId(@PathVariable long commentId) {
         Comment deleted = commentService.deleteById(commentId);
         return new ResponseEntity<>(mapper.map(deleted, SentCommentDto.class), HttpStatus.OK);
