@@ -1,10 +1,9 @@
-package by.tms.sportseventplanner.rest;
+package by.tms.sportseventplanner.controller;
 
-import by.tms.sportseventplanner.dto.organization.OrganizationDto;
 import by.tms.sportseventplanner.dto.weather.WeatherDto;
 import by.tms.sportseventplanner.entity.Weather;
-import by.tms.sportseventplanner.repository.EventRepository;
 import by.tms.sportseventplanner.service.WeatherService;
+import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,7 @@ public class WeatherController {
 
 
     @GetMapping("/current/{city}")
-    public ResponseEntity<?> getCurrentWeather(@PathVariable String city){
+    public ResponseEntity<?> getCurrentWeather(@PathVariable @Length(min = 1, max = 255) String city){
         Weather currentWeather = weatherService.getCurrentWeather(city);
         return new ResponseEntity<>(mapper.map(currentWeather, WeatherDto.class), HttpStatus.OK);
     }
