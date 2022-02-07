@@ -1,15 +1,17 @@
-package by.tms.sportseventplanner.rest;
+package by.tms.sportseventplanner.controller;
 
 import by.tms.sportseventplanner.dto.comment.RequestCommentDto;
 import by.tms.sportseventplanner.dto.comment.SentCommentDto;
 import by.tms.sportseventplanner.entity.Comment;
 import by.tms.sportseventplanner.service.CommentService;
+import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,8 +26,9 @@ public class CommentController {
     private ModelMapper mapper;
 
     @PostMapping("/create/{commentId}")
-    public ResponseEntity<?> createComment(@PathVariable long commentId, @RequestBody RequestCommentDto requestCommentDto) {
-        Comment created = commentService.save(commentId,mapper.map(requestCommentDto, Comment.class));
+    public ResponseEntity<?> createComment(@PathVariable long commentId,
+                                           @Valid @RequestBody RequestCommentDto requestCommentDto) {
+        Comment created = commentService.save(commentId, mapper.map(requestCommentDto, Comment.class));
         return new ResponseEntity<>(mapper.map(created, SentCommentDto.class), HttpStatus.CREATED);
     }
 
@@ -44,7 +47,7 @@ public class CommentController {
     }
 
     @GetMapping("/byOrganization/{creatorName}")
-    public ResponseEntity<?>getAllCommentsByCreatorName(@PathVariable String creatorName){
+    public ResponseEntity<?> getAllCommentsByCreatorName(@PathVariable @Length(min = 1, max = 255) String creatorName) {
         List<SentCommentDto> commentDtoList = commentService.getListCommentByCreatorName(creatorName).stream()
                 .map(comment -> mapper.map(comment, SentCommentDto.class))
                 .collect(Collectors.toList());
@@ -52,7 +55,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<?> deleteByCommentId(@PathVariable long commentId){
+    public ResponseEntity<?> deleteByCommentId(@PathVariable long commentId) {
         Comment deleted = commentService.deleteById(commentId);
         return new ResponseEntity<>(mapper.map(deleted, SentCommentDto.class), HttpStatus.OK);
     }
