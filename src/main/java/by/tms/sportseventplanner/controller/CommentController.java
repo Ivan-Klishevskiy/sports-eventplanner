@@ -11,12 +11,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -46,8 +49,14 @@ public class CommentController {
 
     @GetMapping("/byEvent/{eventId}")
     @Operation(summary = "Find comment by eventId")
-    public ResponseEntity<?> getAllCommentsByEventId(@PathVariable long eventId) {
-        List<SentCommentDto> commentDtoList = commentService.getListCommentByEventId(eventId).stream()
+    public ResponseEntity<?> getAllCommentsByEventId(@PathVariable long eventId,
+                                                     @RequestParam Optional<Integer> page,
+                                                     @RequestParam Optional<Integer> size,
+                                                     @RequestParam Optional<String> sortBy) {
+        List<SentCommentDto> commentDtoList = commentService.getListCommentByEventId(eventId,(PageRequest.of(page.orElse(0),
+                        size.orElse(5),
+                        Sort.Direction.ASC,
+                        sortBy.orElse("id")))).stream()
                 .map(comment -> mapper.map(comment, SentCommentDto.class))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(commentDtoList, HttpStatus.OK);
@@ -55,8 +64,14 @@ public class CommentController {
 
     @GetMapping("/byOrganization/{creatorName}")
     @Operation(summary = "Find all comment by organization name")
-    public ResponseEntity<?> getAllCommentsByCreatorName(@PathVariable @Length(min = 1, max = 255) String creatorName) {
-        List<SentCommentDto> commentDtoList = commentService.getListCommentByCreatorName(creatorName).stream()
+    public ResponseEntity<?> getAllCommentsByCreatorName(@PathVariable @Length(min = 1, max = 255) String creatorName,
+                                                         @RequestParam Optional<Integer> page,
+                                                         @RequestParam Optional<Integer> size,
+                                                         @RequestParam Optional<String> sortBy) {
+        List<SentCommentDto> commentDtoList = commentService.getListCommentByCreatorName(creatorName,(PageRequest.of(page.orElse(0),
+                        size.orElse(5),
+                        Sort.Direction.ASC,
+                        sortBy.orElse("id")))).stream()
                 .map(comment -> mapper.map(comment, SentCommentDto.class))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(commentDtoList, HttpStatus.OK);

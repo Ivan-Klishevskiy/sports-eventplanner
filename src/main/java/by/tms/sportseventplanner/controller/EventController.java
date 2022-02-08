@@ -9,6 +9,8 @@ import org.hibernate.validator.constraints.Length;
 import org.intellij.lang.annotations.RegExp;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -52,8 +55,14 @@ public class EventController {
 
     @GetMapping("/getByName/{name}")
     @Operation(summary = "Find event by organization name")
-    public ResponseEntity<?> getEventsByCreatorName(@PathVariable @Length(min = 1, max = 255) String name) {
-        List<SentEventDto> sentEventDtoList = eventService.findAllByCreatorName(name)
+    public ResponseEntity<?> getEventsByCreatorName(@PathVariable @Length(min = 1, max = 255) String name,
+                                                    @RequestParam Optional<Integer> page,
+                                                    @RequestParam Optional<Integer> size,
+                                                    @RequestParam Optional<String> sortBy) {
+        List<SentEventDto> sentEventDtoList = eventService.findAllByCreatorName(name, (PageRequest.of(page.orElse(0),
+                        size.orElse(5),
+                        Sort.Direction.ASC,
+                        sortBy.orElse("date"))))
                 .stream()
                 .map(record -> mapper.map(record, SentEventDto.class))
                 .collect(Collectors.toList());
@@ -62,9 +71,15 @@ public class EventController {
 
     @GetMapping("/getByDate")
     @Operation(summary = "Find event by date")
-    public ResponseEntity<?> getEventsByDate(@RequestParam String date) {
+    public ResponseEntity<?> getEventsByDate(@RequestParam String date,
+                                             @RequestParam Optional<Integer> page,
+                                             @RequestParam Optional<Integer> size,
+                                             @RequestParam Optional<String> sortBy) {
         List<SentEventDto> sentEventDtoList = eventService
-                .findByDate(date)
+                .findByDate(date,(PageRequest.of(page.orElse(0),
+                        size.orElse(5),
+                        Sort.Direction.ASC,
+                        sortBy.orElse("id"))))
                 .stream()
                 .map(record -> mapper.map(record, SentEventDto.class))
                 .collect(Collectors.toList());
