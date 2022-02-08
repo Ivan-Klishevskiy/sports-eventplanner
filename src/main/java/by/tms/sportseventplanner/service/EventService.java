@@ -6,6 +6,8 @@ import by.tms.sportseventplanner.repository.CommentRepository;
 import by.tms.sportseventplanner.repository.EventRepository;
 import by.tms.sportseventplanner.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -46,15 +48,15 @@ public class EventService {
                 .orElseThrow(() -> new RuntimeException(String.format("Event id %d is not exist!", id)));
     }
 
-    public List<Event> findAllByCreatorName(String creatorName) {
+    public Page<Event> findAllByCreatorName(String creatorName, Pageable page) {
         return eventRepository
-                .findAllByCreatorOrganization(creatorName)
+                .findAllByCreatorOrganization(creatorName,page)
                 .orElseThrow(() -> new RuntimeException(String.format("Event by %s is not exist!", creatorName)));
     }
 
-    public List<Event> findByDate(String date) {
+    public Page<Event> findByDate(String date,Pageable page) {
         return eventRepository
-                .findAllByDate(LocalDate.parse(date))
+                .findAllByDate(LocalDate.parse(date),page)
                 .orElseThrow(() -> new RuntimeException(String.format("Event with date %s is not exist!", date)));
     }
 
