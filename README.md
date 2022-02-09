@@ -7,7 +7,7 @@ Prerequisites:
 * Maven
 
 Technology stack:
-* Spring Boot
+* Spring REST API
 * Spring Data JPA
 * H2/MySql
 * Spring Security
